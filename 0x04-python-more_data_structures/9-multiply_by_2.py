@@ -1,10 +1,7 @@
 #!/usr/bin/python3
-def print_last_digit(number):
-    if number >= 0:
-        ld = number % 10
-    else:
-        ld = number % -10
-        ld *= -1
-
-    print("{:d}".format(ld), end='')
-    return (ld)
+def multiply_by_2(a_dictionary):
+    dic = a_dictionary.copy()
+    arr = list(dic.keys())
+    for i in arr:
+        dic[i] = dic[i] * 2
+    return 
