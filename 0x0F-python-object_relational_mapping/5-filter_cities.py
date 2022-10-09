@@ -1,28 +1,29 @@
 #!/usr/bin/python3
-"""
-A script that takes in the name of a state as an argument and
-lists all cities of that state, using the database hbtn_0e_4_usa
-"""
+'''database connection script'''
 
-if __name__ == "__main__":
-    import MySQLdb
-    import sys
+from sys import argv
+import MySQLdb
 
-USERNAME, PASSWORD, DB, statename = sys.argv[1:5]
+'''connection Setup'''
+if __name__ == '__main__':
+    connection = MySQLdb.connect(
+            host="localhost",
+            port=3306, user=argv[1],
+            passwd=argv[2],
+            db=argv[3],
+            charset="utf8"
+            )
 
-db = MySQLdb.connect(host="localhost", port=3306,
-        user=USERNAME, passwd=PASSWORD, db=DB)
+    db = connection.cursor()
 
-cur = db.cursor()
-cur.execute("SELECT c.name FROM cities AS c \
-            INNER JOIN states AS s ON c.state_id = s.id \
-            WHERE s.name =  BINARY %s \
-            ORDER BY c.id ", (statename,))
+    db.execute("SELECT cities.name FROM cities" +
+            " INNER JOIN states ON cities.state_id = states.id" +
+            " WHERE states.name LIKE %s;", [argv[4]])
 
-rows = cur.fetchall()
-cities = [row[0] for row in rows]
-[print(city, end=", ") for city in cities[:-1]]
+    query_rows = db.fetchall()
 
-if cities:
-    print(cities[-1], end="")
-print()
+    print(', '.join(map(lambda x: x[0], query_rows)))
+
+    db.close()
+
+   connection.close()
