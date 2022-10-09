@@ -21,4 +21,4 @@ def __init__(self, name):
 
     """Initialize the State class """
 self.name = name
-Footer
+
